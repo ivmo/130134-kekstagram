@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Equi Librium](https://up.htmlacademy.ru/javascript/16/user/130134).
-* Наставник: `Магомед Кандаев`.
+* Наставник: [Магомед Кандаев](https://htmlacademy.ru/profile/magomedkandaev).
 
 ---
 
