@@ -23,8 +23,10 @@ var NAMES = [
   'Катя'
 ];
 
-var getRandomValue = function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+var getRandomValue = function (min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 var getFeatureValue = function (featuresArr) {
@@ -57,10 +59,10 @@ var createData = function (picsCount, comments, names) {
   for (var i = 0; i < picsCount; i++) {
     var dataItem = {
       url: 'photos/' + arrPictures[i] + '.jpg',
-      likes: getRandomValue(15, 201),
+      likes: getRandomValue(15, 200),
       comments: [
         {
-          avatar: 'img/avatar-' + getRandomValue(1, 7) + '.svg',
+          avatar: 'img/avatar-' + getRandomValue(1, 6) + '.svg',
           message: getFeatureValue(comments),
           name: getFeatureValue(names)
         }
@@ -88,9 +90,9 @@ var renderPictureItem = function (pictureItem) {
 var putPictures = function () {
   var picturesList = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < allData.length; i++) {
-    fragment.appendChild(renderPictureItem(allData[i]));
-  }
+  allData.forEach(function (item) {
+    fragment.appendChild(renderPictureItem(item));
+  });
   picturesList.appendChild(fragment);
 };
 
@@ -118,13 +120,13 @@ var showBigPicture = function () {
 
   var commentsList = bigPicture.querySelector('.social__comments');
   var commentItem = commentsList.querySelectorAll('.social__comment');
-  for (var i = 0; i < commentItem.length; i++) {
-    commentsList.removeChild(commentItem[i]);
-  }
+  commentItem.forEach(function(item) {
+    commentsList.removeChild(item);
+  });
   var fragment = document.createDocumentFragment();
-  for (var j = 0; j < allData[0].comments.length; j++) {
-    fragment.appendChild(renderComment(allData[0].comments[j]));
-  }
+  allData[0].comments.forEach(function (item) {
+    fragment.appendChild(renderComment(item));
+  });
   commentsList.appendChild(fragment);
 
   return bigPicture;
