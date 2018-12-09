@@ -83,7 +83,6 @@ var createData = function (picsCount, comments, names) {
 
 var allData = createData(25, COMMENTS, NAMES);
 
-
 var renderPictureItem = function (pictureItem) {
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var pictureElement = pictureTemplate.cloneNode(true);
