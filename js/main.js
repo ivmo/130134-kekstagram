@@ -1,5 +1,8 @@
 'use strict';
 
+var ESC = 27;
+var ENTER = 13;
+
 var COMMENTS = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -142,7 +145,154 @@ var showBigPicture = function () {
   return bigPicture;
 };
 
-showBigPicture();
+
 
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.comments-loader').classList.add('visually-hidden');
+
+
+var uploadInput = document.querySelector('#upload-file');
+var uploadForm = document.querySelector('#upload-select-image');
+var uploadFormInner = document.querySelector('.img-upload__overlay');
+var focus = false;
+
+var inputFocus = function (evt) {
+  if (evt.target.classList.contains('text__description') || evt.target.classList.contains('text__hashtags')) {
+    focus = true;
+  }
+  return focus;
+};
+
+var inputBlur = function (evt) {
+  if (evt.target.classList.contains('text__description') || evt.target.classList.contains('text__hashtags')) {
+    focus = false;
+  }
+  return focus;
+};
+
+var openPhotoForm = function () {
+  uploadFormInner.classList.remove('hidden');
+  uploadFormInner.addEventListener('click', closePhotoForm);
+  document.addEventListener('keydown', closePhotoFormKeydown);
+  uploadFormInner.addEventListener('focus', inputFocus, true);
+  uploadFormInner.addEventListener('blur', inputBlur, true);
+};
+
+var closePhotoForm = function (evt) {
+  if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay')) {
+    uploadFormInner.classList.add('hidden');
+    uploadFormInner.removeEventListener('click', closePhotoForm);
+    uploadFormInner.removeEventListener('focus', inputFocus, true);
+    uploadFormInner.removeEventListener('blur', inputBlur, true);
+    uploadForm.reset();
+  }
+};
+
+var closePhotoFormKeydown = function (evt) {
+  if (evt.keyCode === ESC && focus === false) {
+    uploadFormInner.classList.add('hidden');
+    uploadFormInner.removeEventListener('click', closePhotoForm);
+    uploadFormInner.removeEventListener('focus', inputFocus, true);
+    uploadFormInner.removeEventListener('blur', inputBlur, true);
+    uploadForm.reset();
+  }
+};
+
+uploadInput.addEventListener('change', function () {
+  openPhotoForm();
+});
+
+var effectSlider = uploadFormInner.querySelector('.img-upload__effect-level');
+var effectPin = uploadFormInner.querySelector('.effect-level__pin');
+var zoomOut = uploadFormInner.querySelector('.scale__control--smaller');
+var zoomIn = uploadFormInner.querySelector('.scale__control--bigger');
+var zoomValue = uploadFormInner.querySelector('.scale__control--value');
+var imgPreview = uploadFormInner.querySelector('.img-upload__preview');
+
+
+
+var decreaseZoom = function () {
+  var currZoom = parseInt(zoomValue.value) - 25;
+  if (currZoom < 0) {
+    currZoom = 0;
+  }
+  zoomValue.value = currZoom + '%';
+  imgPreview.style.transform = 'scale(' + currZoom / 100 +')';
+};
+
+var increaseZoom = function () {
+  var currZoom = parseInt(zoomValue.value) + 25;
+  if (currZoom > 100) {
+    currZoom = 100;
+  }
+  zoomValue.value = currZoom + '%';
+  imgPreview.style.transform = 'scale(' + currZoom / 100 +')';
+};
+
+zoomOut.addEventListener('click', decreaseZoom);
+zoomIn.addEventListener('click', increaseZoom);
+
+var filtersList = uploadFormInner.querySelector('.effects__list');
+
+var setFilter = function (evt) {
+  if (evt.target.classList.contains('effects__radio')) {
+    imgPreview.querySelector('img').style.filter = '';
+    effectPin.style.left = '100%';
+    if (imgPreview.querySelector('img').classList.length) {
+      var currClass = imgPreview.querySelector('img').className;
+      imgPreview.querySelector('img').classList.remove(currClass);
+    }
+    var effect = evt.target.value;
+    var effectClass = 'effects__preview--' + effect;
+    imgPreview.querySelector('img').classList.add(effectClass);
+    if (effectClass === 'effects__preview--none') {
+      effectSlider.classList.add('hidden');
+    } else {
+      effectSlider.classList.remove('hidden');
+    }
+  }
+};
+
+filtersList.addEventListener('click', setFilter);
+
+var effectInput = uploadFormInner.querySelector('.effect-level__value');
+
+var filterSaturation = function () {
+  effectInput.value = parseInt(effectPin.style.left);
+  switch (filtersList.querySelector('.effects__radio:checked').id) {
+    case 'effect-chrome':
+      effectInput.value = effectInput.value / 100;
+      console.log(effectInput.value);
+      imgPreview.querySelector('img').style.filter = 'grayscale(' + effectInput.value + ')';
+      break;
+    case 'effect-sepia':
+      effectInput.value = effectInput.value / 100;
+      imgPreview.querySelector('img').style.filter = 'sepia(' + effectInput.value + ')';
+      break;
+    case 'effect-marvin':
+      imgPreview.querySelector('img').style.filter = 'invert(' + effectInput.value + '%)';
+      break;
+    case 'effect-phobos':
+      effectInput.value = effectInput.value / 100 * 3;
+      imgPreview.querySelector('img').style.filter = 'blur(' + effectInput.value + 'px)';
+      break;
+    case 'effect-heat':
+      effectInput.value = effectInput.value / 100 * 3;
+      imgPreview.querySelector('img').style.filter = 'brightness(' + effectInput.value + ')';
+      break;
+    default:
+  }
+};
+
+effectPin.addEventListener('mouseup', filterSaturation);
+
+
+
+
+
+
+
+
+
+
+//
