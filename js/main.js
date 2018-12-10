@@ -1,7 +1,6 @@
 'use strict';
 
 var ESC = 27;
-var ENTER = 13;
 
 var COMMENTS = [
   'Всё отлично!',
@@ -146,7 +145,6 @@ var showBigPicture = function () {
 };
 
 
-
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.comments-loader').classList.add('visually-hidden');
 
@@ -210,23 +208,22 @@ var zoomValue = uploadFormInner.querySelector('.scale__control--value');
 var imgPreview = uploadFormInner.querySelector('.img-upload__preview');
 
 
-
 var decreaseZoom = function () {
-  var currZoom = parseInt(zoomValue.value) - 25;
+  var currZoom = parseInt(zoomValue.value, 10) - 25;
   if (currZoom < 0) {
     currZoom = 0;
   }
   zoomValue.value = currZoom + '%';
-  imgPreview.style.transform = 'scale(' + currZoom / 100 +')';
+  imgPreview.style.transform = 'scale(' + currZoom / 100 + ')';
 };
 
 var increaseZoom = function () {
-  var currZoom = parseInt(zoomValue.value) + 25;
+  var currZoom = parseInt(zoomValue.value, 10) + 25;
   if (currZoom > 100) {
     currZoom = 100;
   }
   zoomValue.value = currZoom + '%';
-  imgPreview.style.transform = 'scale(' + currZoom / 100 +')';
+  imgPreview.style.transform = 'scale(' + currZoom / 100 + ')';
 };
 
 zoomOut.addEventListener('click', decreaseZoom);
@@ -258,11 +255,10 @@ filtersList.addEventListener('click', setFilter);
 var effectInput = uploadFormInner.querySelector('.effect-level__value');
 
 var filterSaturation = function () {
-  effectInput.value = parseInt(effectPin.style.left);
+  effectInput.value = parseInt(effectPin.style.left, 10);
   switch (filtersList.querySelector('.effects__radio:checked').id) {
     case 'effect-chrome':
       effectInput.value = effectInput.value / 100;
-      console.log(effectInput.value);
       imgPreview.querySelector('img').style.filter = 'grayscale(' + effectInput.value + ')';
       break;
     case 'effect-sepia':
@@ -285,14 +281,6 @@ var filterSaturation = function () {
 };
 
 effectPin.addEventListener('mouseup', filterSaturation);
-
-
-
-
-
-
-
-
 
 
 //
