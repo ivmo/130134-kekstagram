@@ -409,31 +409,31 @@ var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
 uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
 
 var successMessage = 'success';
-var errMessage = 'error';
+// var errMessage = 'error';
 
 var showSuccessMessage = function (messageType) {
-    var successMessageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
-    var successMessageElement = successMessageTemplate.cloneNode(true);
+  var successMessageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
+  var successMessageElement = successMessageTemplate.cloneNode(true);
 
-    var messageContainer = document.querySelector('main');
-    var fragment = document.createDocumentFragment();
-    fragment.appendChild(successMessageElement);
-    messageContainer.appendChild(fragment);
+  var messageContainer = document.querySelector('main');
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(successMessageElement);
+  messageContainer.appendChild(fragment);
 
-    var message = document.querySelector('main .' + messageType);
-    var removeMessage = function (evt) {
-      if (evt.currentTarget.classList.contains(messageType) || evt.target.classList.contains('.' + messageType + '__button') || evt.keyCode === ESC) {
-        message.remove();
-      }
-    };
+  var message = document.querySelector('main .' + messageType);
+  var removeMessage = function (evt) {
+    if (evt.currentTarget.classList.contains(messageType) || evt.target.classList.contains('.' + messageType + '__button') || evt.keyCode === ESC) {
+      message.remove();
+    }
+  };
 
-    message.addEventListener('click', removeMessage);
-    document.addEventListener('keydown', removeMessage);
+  message.addEventListener('click', removeMessage);
+  document.addEventListener('keydown', removeMessage);
 };
 
 var uploadPhotoSubmit = function (evt) {
   evt.preventDefault();
   showSuccessMessage(successMessage);
-}
+};
 
 uploadPhotoBtn.addEventListener('click', uploadPhotoSubmit);
