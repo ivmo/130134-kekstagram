@@ -161,7 +161,7 @@ var closeBigPictureKeydown = function (evt) {
 var picturesContainer = document.querySelector('.pictures');
 
 var miniatureClickHandler = function (evt) {
-  if (evt.target.classList.contains('picture') || evt.target.parentElement.classList.contains('picture')) {
+  if (evt.target.classList.contains('picture') || evt.target.closest('.picture')) {
     evt.preventDefault();
     var pictureData;
     var target = evt.target;
@@ -250,7 +250,7 @@ var openPhotoForm = function () {
 };
 
 var closePhotoForm = function (evt) {
-  if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay')) {
+  if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay') || evt.target.classList.contains('img-upload__submit')) {
     uploadFormInner.classList.add('hidden');
     uploadFormInner.removeEventListener('click', closePhotoForm);
     uploadFormInner.removeEventListener('focus', inputFocus, true);
@@ -407,3 +407,33 @@ hashtagsInput.addEventListener('input', function () {
 var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
 
 uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
+
+var successMessage = 'success';
+var errMessage = 'error';
+
+var showSuccessMessage = function (messageType) {
+    var successMessageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
+    var successMessageElement = successMessageTemplate.cloneNode(true);
+
+    var messageContainer = document.querySelector('main');
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(successMessageElement);
+    messageContainer.appendChild(fragment);
+
+    var message = document.querySelector('main .' + messageType);
+    var removeMessage = function (evt) {
+      if (evt.currentTarget.classList.contains(messageType) || evt.target.classList.contains('.' + messageType + '__button') || evt.keyCode === ESC) {
+        message.remove();
+      }
+    };
+
+    message.addEventListener('click', removeMessage);
+    document.addEventListener('keydown', removeMessage);
+};
+
+var uploadPhotoSubmit = function (evt) {
+  evt.preventDefault();
+  showSuccessMessage(successMessage);
+}
+
+uploadPhotoBtn.addEventListener('click', uploadPhotoSubmit);
