@@ -395,7 +395,7 @@ effectPin.addEventListener('mousedown', function (evt) {
     // filterSaturationMouseupHandler();
     effectPinContainer.removeEventListener('mousemove', mouseMoveHandler);
     effectPinContainer.removeEventListener('mouseup', mouseUpHandler);
-
+    effectPinContainer.removeEventListener('mouseleave', mouseUpHandler);
 
   };
 
@@ -403,6 +403,7 @@ effectPin.addEventListener('mousedown', function (evt) {
 
   effectPinContainer.addEventListener('mousemove', mouseMoveHandler);
   effectPinContainer.addEventListener('mouseup', mouseUpHandler);
+  effectPinContainer.addEventListener('mouseleave', mouseUpHandler);
 });
 
 
