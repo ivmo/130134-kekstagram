@@ -250,7 +250,7 @@ var openPhotoForm = function () {
 };
 
 var closePhotoForm = function (evt) {
-  if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay') || evt.target.classList.contains('img-upload__submit')) {
+  if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay')) {
     uploadFormInner.classList.add('hidden');
     uploadFormInner.removeEventListener('click', closePhotoForm);
     uploadFormInner.removeEventListener('focus', inputFocus, true);
@@ -356,8 +356,31 @@ var filterSaturationMouseupHandler = function () {
 
 effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
 
+var successMessage = 'success';
+// var errMessage = 'error';
 
-var hashtagsInputValidationHandler = function () {
+var showMessage = function (messageType) {
+  var messageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
+  var messageElement = messageTemplate.cloneNode(true);
+
+  var messageContainer = document.querySelector('main');
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(messageElement);
+  messageContainer.appendChild(fragment);
+
+  var message = document.querySelector('main .' + messageType);
+  var removeMessage = function (evt) {
+    if (evt.target.classList.contains(messageType) || evt.target.classList.contains(messageType + '__button') || evt.keyCode === ESC) {
+      message.remove();
+    }
+  };
+
+  message.addEventListener('click', removeMessage);
+  document.addEventListener('keydown', removeMessage);
+};
+
+
+var hashtagsInputValidationHandler = function (evt) {
   if (hashtagsInput.value.length > 1) {
     var hashtags = hashtagsInput.value;
     var hashtagsArr = hashtags.split(' ');
@@ -395,8 +418,26 @@ var hashtagsInputValidationHandler = function () {
     }
 
     hashtagsInput.setCustomValidity(validateMessage);
-    hashtagsInput.reportValidity();
 
+
+  }
+  hashtagsInput.reportValidity();
+  if (hashtagsInput.reportValidity()) {
+    evt.preventDefault();
+    uploadFormInner.classList.add('hidden');
+    uploadFormInner.removeEventListener('click', closePhotoForm);
+    uploadFormInner.removeEventListener('focus', inputFocus, true);
+    uploadFormInner.removeEventListener('blur', inputBlur, true);
+    imgPreview.style.transform = '';
+    imgPreview.querySelector('img').style.filter = '';
+    effectPin.style.left = '100%';
+    effectDepthLine.style.width = effectPin.style.left;
+    var currClass = imgPreview.querySelector('img').className;
+    if (currClass.length > 0) {
+      imgPreview.querySelector('img').classList.remove(currClass);
+    }
+    uploadForm.reset();
+    showMessage(successMessage);
   }
 };
 
@@ -407,33 +448,3 @@ hashtagsInput.addEventListener('input', function () {
 var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
 
 uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
-
-var successMessage = 'success';
-// var errMessage = 'error';
-
-var showSuccessMessage = function (messageType) {
-  var successMessageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
-  var successMessageElement = successMessageTemplate.cloneNode(true);
-
-  var messageContainer = document.querySelector('main');
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(successMessageElement);
-  messageContainer.appendChild(fragment);
-
-  var message = document.querySelector('main .' + messageType);
-  var removeMessage = function (evt) {
-    if (evt.currentTarget.classList.contains(messageType) || evt.target.classList.contains('.' + messageType + '__button') || evt.keyCode === ESC) {
-      message.remove();
-    }
-  };
-
-  message.addEventListener('click', removeMessage);
-  document.addEventListener('keydown', removeMessage);
-};
-
-var uploadPhotoSubmit = function (evt) {
-  evt.preventDefault();
-  showSuccessMessage(successMessage);
-};
-
-uploadPhotoBtn.addEventListener('click', uploadPhotoSubmit);
