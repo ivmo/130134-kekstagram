@@ -381,11 +381,14 @@ var showMessage = function (messageType) {
 
 
 var hashtagsInputValidationHandler = function (evt) {
-  if (hashtagsInput.value.length > 1) {
+  if (hashtagsInput.value.length > 0) {
     var hashtags = hashtagsInput.value;
     var hashtagsArr = hashtags.split(' ');
-    var getHashtagLength = function (item) {
-      return item.length < 2 || item.length > 20;
+    var checkMaxLength = function (item) {
+      return item.length > 20;
+    };
+    var checkMinLength = function (item) {
+      return item.length < 2;
     };
     var checkHashtagSharp = function (item) {
       return item.slice(0, 1) !== '#';
@@ -404,15 +407,32 @@ var hashtagsInputValidationHandler = function (evt) {
       }
       return controlArr.length > 0;
     };
+    var checkSpaces = function (myArr) {
+      var repeatItems = false;
+      myArr.forEach(function (item) {
+        var itemArr = item.split('');
+        for (var i = 1; i < itemArr.length; i++) {
+          if (itemArr[i] === '#') {
+            repeatItems = true;
+            return;
+          }
+        }
+      });
+      return repeatItems;
+    };
     var validateMessage = '';
     if (hashtagsArr.length > 5) {
       validateMessage = 'Нельзя указать больше пяти хэш-тегов';
-    } else if (hashtagsArr.some(getHashtagLength)) {
-      validateMessage = 'Максимальная длина одного хэш-тега не может быть более 20 символов, включая решётку';
     } else if (hashtagsArr.some(checkHashtagSharp)) {
       validateMessage = 'хэш-тег должен начинаться с символа #';
+    } else if (hashtagsArr.some(checkMaxLength)) {
+      validateMessage = 'Максимальная длина одного хэш-тега не может быть более 20 символов, включая решётку';
+    } else if (hashtagsArr.some(checkMinLength)) {
+      validateMessage = 'Хэш-тег не может состоять только из одной решётки';
     } else if (checkRepeatItems(hashtagsArr)) {
       validateMessage = 'один и тот же хэш-тег не может быть использован дважды';
+    } else if (checkSpaces(hashtagsArr)) {
+      validateMessage = 'Хэштеги должны разделяться пробелами';
     } else {
       validateMessage = '';
     }
@@ -441,7 +461,7 @@ var hashtagsInputValidationHandler = function (evt) {
   }
 };
 
-hashtagsInput.addEventListener('input', function () {
+hashtagsInput.addEventListener('input', function (evt) {
   hashtagsInput.setCustomValidity('');
 });
 
