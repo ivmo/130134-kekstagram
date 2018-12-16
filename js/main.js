@@ -161,7 +161,7 @@ var closeBigPictureKeydown = function (evt) {
 var picturesContainer = document.querySelector('.pictures');
 
 var miniatureClickHandler = function (evt) {
-  if (evt.target.classList.contains('picture') || evt.target.parentElement.classList.contains('picture')) {
+  if (evt.target.classList.contains('picture') || evt.target.closest('.picture')) {
     evt.preventDefault();
     var pictureData;
     var target = evt.target;
@@ -356,13 +356,39 @@ var filterSaturationMouseupHandler = function () {
 
 effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
 
+var successMessage = 'success';
+// var errMessage = 'error';
 
-var hashtagsInputValidationHandler = function () {
-  if (hashtagsInput.value.length > 1) {
+var showMessage = function (messageType) {
+  var messageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
+  var messageElement = messageTemplate.cloneNode(true);
+
+  var messageContainer = document.querySelector('main');
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(messageElement);
+  messageContainer.appendChild(fragment);
+
+  var message = document.querySelector('main .' + messageType);
+  var removeMessage = function (evt) {
+    if (evt.target.classList.contains(messageType) || evt.target.classList.contains(messageType + '__button') || evt.keyCode === ESC) {
+      message.remove();
+    }
+  };
+
+  message.addEventListener('click', removeMessage);
+  document.addEventListener('keydown', removeMessage);
+};
+
+
+var hashtagsInputValidationHandler = function (evt) {
+  if (hashtagsInput.value.length > 0) {
     var hashtags = hashtagsInput.value;
     var hashtagsArr = hashtags.split(' ');
-    var getHashtagLength = function (item) {
-      return item.length < 2 || item.length > 20;
+    var checkMaxLength = function (item) {
+      return item.length > 20;
+    };
+    var checkMinLength = function (item) {
+      return item.length < 2;
     };
     var checkHashtagSharp = function (item) {
       return item.slice(0, 1) !== '#';
@@ -381,26 +407,61 @@ var hashtagsInputValidationHandler = function () {
       }
       return controlArr.length > 0;
     };
+    var checkSpaces = function (myArr) {
+      var repeatItems = false;
+      myArr.forEach(function (item) {
+        var itemArr = item.split('');
+        for (var i = 1; i < itemArr.length; i++) {
+          if (itemArr[i] === '#') {
+            repeatItems = true;
+            return;
+          }
+        }
+      });
+      return repeatItems;
+    };
     var validateMessage = '';
     if (hashtagsArr.length > 5) {
       validateMessage = 'Нельзя указать больше пяти хэш-тегов';
-    } else if (hashtagsArr.some(getHashtagLength)) {
-      validateMessage = 'Максимальная длина одного хэш-тега не может быть более 20 символов, включая решётку';
     } else if (hashtagsArr.some(checkHashtagSharp)) {
       validateMessage = 'хэш-тег должен начинаться с символа #';
+    } else if (hashtagsArr.some(checkMaxLength)) {
+      validateMessage = 'Максимальная длина одного хэш-тега не может быть более 20 символов, включая решётку';
+    } else if (hashtagsArr.some(checkMinLength)) {
+      validateMessage = 'Хэш-тег не может состоять только из одной решётки';
     } else if (checkRepeatItems(hashtagsArr)) {
       validateMessage = 'один и тот же хэш-тег не может быть использован дважды';
+    } else if (checkSpaces(hashtagsArr)) {
+      validateMessage = 'Хэштеги должны разделяться пробелами';
     } else {
       validateMessage = '';
     }
 
     hashtagsInput.setCustomValidity(validateMessage);
-    hashtagsInput.reportValidity();
 
+
+  }
+  hashtagsInput.reportValidity();
+  if (hashtagsInput.reportValidity()) {
+    evt.preventDefault();
+    uploadFormInner.classList.add('hidden');
+    uploadFormInner.removeEventListener('click', closePhotoForm);
+    uploadFormInner.removeEventListener('focus', inputFocus, true);
+    uploadFormInner.removeEventListener('blur', inputBlur, true);
+    imgPreview.style.transform = '';
+    imgPreview.querySelector('img').style.filter = '';
+    effectPin.style.left = '100%';
+    effectDepthLine.style.width = effectPin.style.left;
+    var currClass = imgPreview.querySelector('img').className;
+    if (currClass.length > 0) {
+      imgPreview.querySelector('img').classList.remove(currClass);
+    }
+    uploadForm.reset();
+    showMessage(successMessage);
   }
 };
 
-hashtagsInput.addEventListener('input', function () {
+hashtagsInput.addEventListener('input', function (evt) {
   hashtagsInput.setCustomValidity('');
 });
 
