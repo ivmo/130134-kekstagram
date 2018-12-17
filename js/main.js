@@ -327,34 +327,83 @@ var setFilterClickHandler = function (evt) {
 filtersList.addEventListener('click', setFilterClickHandler);
 
 
-var filterSaturationMouseupHandler = function () {
-  effectInput.value = parseInt(effectPin.style.left, 10);
-  effectDepthLine.style.width = effectPin.style.left;
-  switch (filtersList.querySelector('.effects__radio:checked').id) {
-    case 'effect-chrome':
-      effectInput.value = effectInput.value / 100;
-      imgPreview.querySelector('img').style.filter = 'grayscale(' + effectInput.value + ')';
-      break;
-    case 'effect-sepia':
-      effectInput.value = effectInput.value / 100;
-      imgPreview.querySelector('img').style.filter = 'sepia(' + effectInput.value + ')';
-      break;
-    case 'effect-marvin':
-      imgPreview.querySelector('img').style.filter = 'invert(' + effectInput.value + '%)';
-      break;
-    case 'effect-phobos':
-      effectInput.value = effectInput.value / 100 * 3;
-      imgPreview.querySelector('img').style.filter = 'blur(' + effectInput.value + 'px)';
-      break;
-    case 'effect-heat':
-      effectInput.value = effectInput.value / 100 * 3;
-      imgPreview.querySelector('img').style.filter = 'brightness(' + effectInput.value + ')';
-      break;
-    default:
-  }
-};
+var effectPinContainer = uploadFormInner.querySelector('.effect-level__line');
 
-effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
+effectPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var lineWidth = effectPinContainer.offsetWidth;
+
+
+  var filterSaturationMouseupHandler = function () {
+    effectInput.value = parseInt(parseInt(effectPin.style.left, 10) / (lineWidth / 100), 10);
+    effectDepthLine.style.width = effectPin.style.left;
+    switch (filtersList.querySelector('.effects__radio:checked').id) {
+      case 'effect-chrome':
+        effectInput.value = effectInput.value / 100;
+        imgPreview.querySelector('img').style.filter = 'grayscale(' + effectInput.value + ')';
+        break;
+      case 'effect-sepia':
+        effectInput.value = effectInput.value / 100;
+        imgPreview.querySelector('img').style.filter = 'sepia(' + effectInput.value + ')';
+        break;
+      case 'effect-marvin':
+        imgPreview.querySelector('img').style.filter = 'invert(' + effectInput.value + '%)';
+        break;
+      case 'effect-phobos':
+        effectInput.value = effectInput.value / 100 * 3;
+        imgPreview.querySelector('img').style.filter = 'blur(' + effectInput.value + 'px)';
+        break;
+      case 'effect-heat':
+        effectInput.value = effectInput.value / 100 * 3;
+        imgPreview.querySelector('img').style.filter = 'brightness(' + effectInput.value + ')';
+        break;
+      default:
+    }
+  };
+
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+
+    var currCoords = effectPin.offsetLeft - shift.x;
+    if (currCoords < 0) {
+      currCoords = 0;
+    }
+    if (currCoords > lineWidth) {
+      currCoords = lineWidth;
+    }
+    effectPin.style.left = currCoords + 'px';
+
+    filterSaturationMouseupHandler();
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+
+    // filterSaturationMouseupHandler();
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+
+  };
+
+  // effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+});
+
 
 var successMessage = 'success';
 // var errMessage = 'error';
@@ -438,9 +487,8 @@ var hashtagsInputValidationHandler = function (evt) {
     }
 
     hashtagsInput.setCustomValidity(validateMessage);
-
-
   }
+
   hashtagsInput.reportValidity();
   if (hashtagsInput.reportValidity()) {
     evt.preventDefault();
@@ -461,7 +509,7 @@ var hashtagsInputValidationHandler = function (evt) {
   }
 };
 
-hashtagsInput.addEventListener('input', function (evt) {
+hashtagsInput.addEventListener('input', function () {
   hashtagsInput.setCustomValidity('');
 });
 
