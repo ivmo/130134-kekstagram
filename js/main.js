@@ -393,17 +393,15 @@ effectPin.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
 
     // filterSaturationMouseupHandler();
-    effectPinContainer.removeEventListener('mousemove', mouseMoveHandler);
-    effectPinContainer.removeEventListener('mouseup', mouseUpHandler);
-    effectPinContainer.removeEventListener('mouseleave', mouseUpHandler);
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
 
   };
 
   // effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
 
-  effectPinContainer.addEventListener('mousemove', mouseMoveHandler);
-  effectPinContainer.addEventListener('mouseup', mouseUpHandler);
-  effectPinContainer.addEventListener('mouseleave', mouseUpHandler);
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
 });
 
 
