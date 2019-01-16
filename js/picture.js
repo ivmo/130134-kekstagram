@@ -11,15 +11,17 @@
     return pictureElement;
   };
 
-  var putPictures = function () {
+  var putPictures = function (data) {
     var picturesList = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
-    window.data.allData.forEach(function (item) {
+    data.forEach(function (item) {
       fragment.appendChild(renderPictureItem(item));
     });
     picturesList.appendChild(fragment);
   };
 
-  putPictures();
+  window.picture = {
+    putPictures: putPictures
+  };
 
 })();

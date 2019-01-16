@@ -40,6 +40,6 @@
   window.preview = {
     bigPicture: bigPicture,
     showBigPicture: showBigPicture
-  }
+  };
 
 })();
