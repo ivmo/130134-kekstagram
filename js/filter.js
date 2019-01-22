@@ -22,11 +22,7 @@
   };
 
   var compareNumeric = function (a, b) {
-    if (a.comments.length > b.comments.length) {
-      return -1;
-    } else if (a.comments.length < b.comments.length) {
-      return 1;
-    }
+    return b.comments.length - a.comments.length;
   };
 
   var updatePics = function (data, filterType) {
