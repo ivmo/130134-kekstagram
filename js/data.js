@@ -6,7 +6,7 @@
   var pics;
 
   var onLoad = function (pictures) {
-    window.picture.putPictures(pictures);
+    window.filter.updatePics(pictures, window.filter.filterName);
   };
 
   var onError = function (errorMessage) {
