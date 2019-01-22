@@ -14,6 +14,9 @@
   var putPictures = function (data) {
     var picturesList = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
+    [].forEach.call(picturesList.querySelectorAll('.picture'), function (evt) {
+      evt.parentNode.removeChild(evt);
+    });
     data.forEach(function (item) {
       fragment.appendChild(renderPictureItem(item));
     });
