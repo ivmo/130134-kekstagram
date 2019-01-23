@@ -182,21 +182,16 @@
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      // filterSaturationMouseupHandler();
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
 
     };
 
-    // effectPin.addEventListener('mouseup', filterSaturationMouseupHandler);
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   });
 
-
-  var successMessage = 'success';
-  // var errMessage = 'error';
 
   var showMessage = function (messageType) {
     var messageTemplate = document.querySelector('#' + messageType).content.querySelector('.' + messageType);
@@ -295,7 +290,6 @@
         imgPreview.querySelector('img').classList.remove(currClass);
       }
       uploadForm.reset();
-      showMessage(successMessage);
     }
   };
 
@@ -303,7 +297,13 @@
     hashtagsInput.setCustomValidity('');
   });
 
-  var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
+  // var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
 
-  uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
+  // uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
+
+  window.form = {
+    showMessage: showMessage,
+    upload: uploadForm,
+    hashtagsInputValidationHandler: hashtagsInputValidationHandler
+  }
 })();

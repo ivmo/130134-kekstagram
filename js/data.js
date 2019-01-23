@@ -23,6 +23,26 @@
 
   window.backend.load(onLoad, onError);
 
+
+  var successMessage = 'success';
+  var errorMessage = 'error';
+  var upLoad = function () {
+    window.form.hashtagsInputValidationHandler();
+    window.form.showMessage(successMessage);
+  };
+
+  var onUpError = function () {
+    window.form.showMessage(errorMessage);
+  };
+
+
+  var form = document.querySelector('#upload-select-image');
+  var formData = new FormData(form);
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(formData, upLoad, onUpError);
+    evt.preventDefault();
+  });
+
   window.data = {
     ESC: ESC,
     ENTER: ENTER,

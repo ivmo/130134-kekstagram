@@ -23,12 +23,14 @@
   var closeBigPicture = function (evt) {
     if (evt.target.classList.contains('big-picture') || evt.target.classList.contains('big-picture__cancel')) {
       window.preview.bigPicture.classList.add('hidden');
+      window.preview.bigPicture.removeEventListener('click', closeBigPicture);
     }
   };
 
   var closeBigPictureKeydown = function (evt) {
     if (evt.keyCode === window.data.ESC) {
       window.preview.bigPicture.classList.add('hidden');
+      document.removeEventListener('keydown', closeBigPictureKeydown);
     }
   };
 
@@ -50,9 +52,6 @@
   picturesContainer.addEventListener('click', miniatureClickHandler);
   picturesContainer.addEventListener('keydown', miniatureKeydownHandler);
 
-
-  document.querySelector('.social__comment-count').classList.add('visually-hidden');
-  document.querySelector('.comments-loader').classList.add('visually-hidden');
 
   window.gallery = {
     picturesContainer: picturesContainer,
