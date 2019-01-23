@@ -58,7 +58,7 @@
   };
 
   var closePhotoFormKeydown = function (evt) {
-    if (evt.keyCode === window.data.ESC && focusState === false) {
+    if (evt.keyCode === window.utils.ESC && focusState === false) {
       uploadFormInner.classList.add('hidden');
       uploadFormInner.removeEventListener('click', closePhotoForm);
       uploadFormInner.removeEventListener('focus', inputFocus, true);
@@ -204,7 +204,7 @@
 
     var message = document.querySelector('main .' + messageType);
     var removeMessage = function (evt) {
-      if (evt.target.classList.contains(messageType) || evt.target.classList.contains(messageType + '__button') || evt.keyCode === window.data.ESC) {
+      if (evt.target.classList.contains(messageType) || evt.target.classList.contains(messageType + '__button') || evt.keyCode === window.utils.ESC) {
         message.remove();
       }
     };

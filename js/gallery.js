@@ -16,6 +16,8 @@
       }
     });
     window.preview.showBigPicture(pictureData);
+    window.preview.btnMoreComments.classList.remove('visually-hidden');
+    window.preview.btnMoreComments.addEventListener('click', window.preview.btnMoreCommentsClickHandler);
     window.preview.bigPicture.addEventListener('click', closeBigPicture);
     document.addEventListener('keydown', closeBigPictureKeydown);
   };
@@ -24,11 +26,12 @@
     if (evt.target.classList.contains('big-picture') || evt.target.classList.contains('big-picture__cancel')) {
       window.preview.bigPicture.classList.add('hidden');
       window.preview.bigPicture.removeEventListener('click', closeBigPicture);
+      window.preview.btnMoreComments.removeEventListener('click', window.preview.btnMoreCommentsClickHandler);
     }
   };
 
   var closeBigPictureKeydown = function (evt) {
-    if (evt.keyCode === window.data.ESC) {
+    if (evt.keyCode === window.utils.ESC) {
       window.preview.bigPicture.classList.add('hidden');
       document.removeEventListener('keydown', closeBigPictureKeydown);
     }
@@ -43,7 +46,7 @@
   };
 
   var miniatureKeydownHandler = function (evt) {
-    if (evt.target.classList.contains('picture') && evt.keyCode === window.data.ENTER) {
+    if (evt.target.classList.contains('picture') && evt.keyCode === window.utils.ENTER) {
       evt.preventDefault();
       openBigPicture(evt);
     }

@@ -40,13 +40,12 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      // if (xhr.status === 200) {
+      if (xhr.status === 200) {
         upLoad();
 
-      // } else {
+      } else {
         window.form.showMessage(errorMessage);
-        // onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
-      // }
+      }
     });
 
     xhr.addEventListener('error', function () {

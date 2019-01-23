@@ -7,6 +7,7 @@
 
   var onLoad = function (pictures) {
     window.filter.updatePics(pictures, window.filter.filterName);
+
   };
 
   var onError = function (errorMessage) {
@@ -37,9 +38,8 @@
 
 
   var form = document.querySelector('#upload-select-image');
-  var formData = new FormData(form);
   form.addEventListener('submit', function (evt) {
-    window.backend.save(formData, upLoad, onUpError);
+    window.backend.save(new FormData(form), upLoad, onUpError);
     evt.preventDefault();
   });
 
