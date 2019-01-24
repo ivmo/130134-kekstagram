@@ -26,7 +26,8 @@
   var successMessage = 'success';
   var errorMessage = 'error';
   var upLoad = function () {
-    window.form.hashtagsInputValidationHandler();
+
+    window.form.hide();
     window.form.showMessage(successMessage);
   };
 
@@ -38,8 +39,10 @@
 
   var form = document.querySelector('#upload-select-image');
   form.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(form), upLoad, onUpError);
     evt.preventDefault();
+    if (window.form.hashtagsInputValidationHandler()) {
+      window.backend.save(new FormData(form), upLoad, onUpError);
+    }
   });
 
 })();

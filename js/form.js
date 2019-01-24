@@ -294,7 +294,7 @@
     hashtagsInput.reportValidity();
     if (hashtagsInput.reportValidity()) {
       // evt.preventDefault();
-      hideForm();
+      return true;
     }
   };
 
@@ -303,7 +303,7 @@
   });
 
   // var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
-
+  //
   // uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
 
   window.form = {
