@@ -1,13 +1,11 @@
 'use strict';
 (function () {
-  var ESC = 27;
-  var ENTER = 13;
 
-  var pics;
+  window.data = {};
 
   var onLoad = function (pictures) {
     window.filter.updatePics(pictures, window.filter.filterName);
-
+    window.data.pics = pictures;
   };
 
   var onError = function (errorMessage) {
@@ -33,6 +31,7 @@
   };
 
   var onUpError = function () {
+    window.form.hide();
     window.form.showMessage(errorMessage);
   };
 
@@ -42,11 +41,5 @@
     window.backend.save(new FormData(form), upLoad, onUpError);
     evt.preventDefault();
   });
-
-  window.data = {
-    ESC: ESC,
-    ENTER: ENTER,
-    pics: pics
-  };
 
 })();

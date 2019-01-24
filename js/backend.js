@@ -9,7 +9,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onLoad(xhr.response);
-        window.data.pics = xhr.response;
+
         window.filter.filterInner.classList.remove('img-filters--inactive');
       } else {
         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -44,7 +44,7 @@
         upLoad();
 
       } else {
-        window.form.showMessage(errorMessage);
+        onError();
       }
     });
 

@@ -13,31 +13,43 @@
     return commentElement;
   };
 
-  var commentsCount;
+  var commentsCount = 5;
   var commentsList = bigPicture.querySelector('.social__comments');
+  var copyArr;
 
   var addComment = function (bigPictureItem) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < commentsCount; i++) {
-      fragment.appendChild(renderComment(bigPictureItem.comments[i]));
-    }
-    commentsList.appendChild(fragment);
-    bigPictureItem.comments = bigPictureItem.comments.slice(5);
-    if (bigPictureItem.comments.length < commentsCount) {
-      commentsCount = bigPictureItem.comments.length;
-    }
-    if (bigPictureItem.comments.length === 0) {
+    var showedComments = commentsList.querySelectorAll('.social__comment').length;
+    var newComments = bigPictureItem.comments.slice(showedComments, showedComments + commentsCount);
+    console.log(newComments);
+    if (newComments.length < commentsCount) {
+      commentsCount = newComments.length;
       btnMoreComments.classList.add('visually-hidden');
     }
+    if (newComments.length === 0) {
+      btnMoreComments.classList.add('visually-hidden');
+    }
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < commentsCount; i++) {
+      fragment.appendChild(renderComment(newComments[i]));
+    }
+    commentsList.appendChild(fragment);
+
+
   };
 
   var showComment = function (bigPictureItem) {
+    console.log(bigPictureItem);
     var commentItem = commentsList.querySelectorAll('.social__comment');
     commentItem.forEach(function (item) {
       commentsList.removeChild(item);
     });
     commentsCount = 5;
-    addComment(bigPictureItem);
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < commentsCount; i++) {
+      fragment.appendChild(renderComment(bigPictureItem.comments[i]));
+    }
+    commentsList.appendChild(fragment);
+    // addComment(bigPictureItem);
   };
 
   var btnMoreCommentsClickHandler = function (evt) {
@@ -47,6 +59,7 @@
     window.data.pics.forEach(function (item, i, arrData) {
       if (item.url === pictureUrl) {
         pictureData = arrData[i];
+
       }
     });
     addComment(pictureData);
