@@ -27,12 +27,8 @@
 
     xhr.open('GET', url);
     xhr.send();
-
-
   };
 
-
-  var errorMessage = 'error';
 
   var save = function (data, upLoad, onError) {
     var url = 'https://js.dump.academy/kekstagram';

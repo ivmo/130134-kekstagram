@@ -230,7 +230,7 @@
   };
 
 
-  var hashtagsInputValidationHandler = function (evt) {
+  var hashtagsInputValidationHandler = function () {
     if (hashtagsInput.value.length > 0) {
       var hashtags = hashtagsInput.value;
       var hashtagsArr = hashtags.split(' ');
@@ -293,23 +293,20 @@
 
     hashtagsInput.reportValidity();
     if (hashtagsInput.reportValidity()) {
-      // evt.preventDefault();
-      return true;
+      var validationPassed = true;
     }
+    return validationPassed;
   };
 
   hashtagsInput.addEventListener('input', function () {
     hashtagsInput.setCustomValidity('');
   });
 
-  // var uploadPhotoBtn = uploadForm.querySelector('#upload-submit');
-  //
-  // uploadPhotoBtn.addEventListener('click', hashtagsInputValidationHandler);
 
   window.form = {
     showMessage: showMessage,
     upload: uploadForm,
     hide: hideForm,
     hashtagsInputValidationHandler: hashtagsInputValidationHandler
-  }
+  };
 })();
