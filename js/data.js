@@ -1,12 +1,11 @@
 'use strict';
 (function () {
-  var ESC = 27;
-  var ENTER = 13;
 
-  var pics;
+  window.data = {};
 
   var onLoad = function (pictures) {
     window.filter.updatePics(pictures, window.filter.filterName);
+    window.data.pics = pictures;
   };
 
   var onError = function (errorMessage) {
@@ -23,10 +22,27 @@
 
   window.backend.load(onLoad, onError);
 
-  window.data = {
-    ESC: ESC,
-    ENTER: ENTER,
-    pics: pics
+
+  var successMessage = 'success';
+  var errorMessage = 'error';
+  var upLoad = function () {
+
+    window.form.hide();
+    window.form.showMessage(successMessage);
   };
+
+  var onUpError = function () {
+    window.form.hide();
+    window.form.showMessage(errorMessage);
+  };
+
+
+  var form = document.querySelector('#upload-select-image');
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    if (window.form.hashtagsInputValidationHandler()) {
+      window.backend.save(new FormData(form), upLoad, onUpError);
+    }
+  });
 
 })();

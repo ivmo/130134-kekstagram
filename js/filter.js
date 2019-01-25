@@ -11,13 +11,6 @@
       shuffledArr[i] = shuffledArr[randomValue];
       shuffledArr[randomValue] = currentVal;
     }
-    // shuffledArr.forEach(function (item) {
-    //   var randomValue = Math.floor(Math.random() * shuffledArr.length);
-    //   console.log(item);
-    //   var currentVal = item;
-    //   item = shuffledArr[randomValue];
-    //   shuffledArr[randomValue] = currentVal;
-    // });
     return shuffledArr;
   };
 
