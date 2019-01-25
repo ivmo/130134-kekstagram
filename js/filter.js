@@ -28,7 +28,7 @@
         window.picture.putPictures(newPics);
         break;
       case 'discussed':
-        var discussedArr = data.sort(compareNumeric);
+        var discussedArr = data.slice().sort(compareNumeric);
         window.picture.putPictures(discussedArr);
         break;
       default:
