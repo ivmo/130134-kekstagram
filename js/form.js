@@ -3,6 +3,7 @@
   var uploadInput = document.querySelector('#upload-file');
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFormInner = document.querySelector('.img-upload__overlay');
+  var uploadFormCloseBtn = uploadFormInner.querySelector('.img-upload__cancel');
   var effectSlider = uploadFormInner.querySelector('.img-upload__effect-level');
   var effectPin = uploadFormInner.querySelector('.effect-level__pin');
   var effectDepthLine = uploadFormInner.querySelector('.effect-level__depth');
@@ -32,35 +33,33 @@
   var openPhotoForm = function () {
     effectSlider.classList.add('hidden');
     uploadFormInner.classList.remove('hidden');
-    uploadFormInner.addEventListener('click', closePhotoForm);
+    uploadFormCloseBtn.addEventListener('click', closePhotoForm);
     document.addEventListener('keydown', closePhotoFormKeydown);
     uploadFormInner.addEventListener('focus', inputFocus, true);
     uploadFormInner.addEventListener('blur', inputBlur, true);
     effectDepthLine.style.width = effectPin.style.left;
   };
 
-  var closePhotoForm = function (evt) {
-    if (evt.target.classList.contains('img-upload__cancel') || evt.target.classList.contains('img-upload__overlay')) {
-      uploadFormInner.classList.add('hidden');
-      uploadFormInner.removeEventListener('click', closePhotoForm);
-      uploadFormInner.removeEventListener('focus', inputFocus, true);
-      uploadFormInner.removeEventListener('blur', inputBlur, true);
-      imgPreview.style.transform = '';
-      imgPreview.querySelector('img').style.filter = '';
-      effectPin.style.left = '100%';
-      effectDepthLine.style.width = effectPin.style.left;
-      var currClass = imgPreview.querySelector('img').className;
-      if (currClass.length > 0) {
-        imgPreview.querySelector('img').classList.remove(currClass);
-      }
-      uploadForm.reset();
+  var closePhotoForm = function () {
+    uploadFormInner.classList.add('hidden');
+    uploadFormCloseBtn.removeEventListener('click', closePhotoForm);
+    uploadFormInner.removeEventListener('focus', inputFocus, true);
+    uploadFormInner.removeEventListener('blur', inputBlur, true);
+    imgPreview.style.transform = '';
+    imgPreview.querySelector('img').style.filter = '';
+    effectPin.style.left = '100%';
+    effectDepthLine.style.width = effectPin.style.left;
+    var currClass = imgPreview.querySelector('img').className;
+    if (currClass.length > 0) {
+      imgPreview.querySelector('img').classList.remove(currClass);
     }
+    uploadForm.reset();
   };
 
   var closePhotoFormKeydown = function (evt) {
     if (evt.keyCode === window.utils.ESC && focusState === false) {
       uploadFormInner.classList.add('hidden');
-      uploadFormInner.removeEventListener('click', closePhotoForm);
+      uploadFormCloseBtn.removeEventListener('click', closePhotoForm);
       uploadFormInner.removeEventListener('focus', inputFocus, true);
       uploadFormInner.removeEventListener('blur', inputBlur, true);
       imgPreview.style.transform = '';
@@ -213,22 +212,6 @@
     document.addEventListener('keydown', removeMessage);
   };
 
-  var hideForm = function () {
-    uploadFormInner.classList.add('hidden');
-    uploadFormInner.removeEventListener('click', closePhotoForm);
-    uploadFormInner.removeEventListener('focus', inputFocus, true);
-    uploadFormInner.removeEventListener('blur', inputBlur, true);
-    imgPreview.style.transform = '';
-    imgPreview.querySelector('img').style.filter = '';
-    effectPin.style.left = '100%';
-    effectDepthLine.style.width = effectPin.style.left;
-    var currClass = imgPreview.querySelector('img').className;
-    if (currClass.length > 0) {
-      imgPreview.querySelector('img').classList.remove(currClass);
-    }
-    uploadForm.reset();
-  };
-
 
   var hashtagsInputValidationHandler = function () {
     if (hashtagsInput.value.length > 0) {
@@ -306,7 +289,7 @@
   window.form = {
     showMessage: showMessage,
     upload: uploadForm,
-    hide: hideForm,
+    hide: closePhotoForm,
     hashtagsInputValidationHandler: hashtagsInputValidationHandler
   };
 })();

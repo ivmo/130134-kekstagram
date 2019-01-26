@@ -3,7 +3,8 @@
   var bigPicture = document.querySelector('.big-picture');
   var btnMoreComments = bigPicture.querySelector('.comments-loader');
   var commentsList = bigPicture.querySelector('.social__comments');
-  var commentsCount = 5;
+  var commentsArr;
+  var commentsCount;
 
   var renderComment = function (comment) {
     var commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
@@ -16,47 +17,33 @@
   };
 
 
-  var addComment = function (bigPictureItem) {
-    var showedComments = commentsList.querySelectorAll('.social__comment').length;
-    var newComments = bigPictureItem.comments.slice(showedComments, showedComments + commentsCount);
-    if (newComments.length < commentsCount) {
-      commentsCount = newComments.length;
-      btnMoreComments.classList.add('visually-hidden');
-    }
-    if (newComments.length === 0) {
+  var addComment = function () {
+    btnMoreComments.classList.remove('visually-hidden');
+    if (commentsArr.length <= commentsCount) {
+      commentsCount = commentsArr.length;
       btnMoreComments.classList.add('visually-hidden');
     }
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < commentsCount; i++) {
-      fragment.appendChild(renderComment(newComments[i]));
+      fragment.appendChild(renderComment(commentsArr[i]));
     }
     commentsList.appendChild(fragment);
+    commentsArr = commentsArr.slice(commentsCount);
   };
 
   var showComment = function (bigPictureItem) {
+    commentsCount = 5;
     var commentItem = commentsList.querySelectorAll('.social__comment');
     commentItem.forEach(function (item) {
       commentsList.removeChild(item);
     });
-    commentsCount = 5;
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < commentsCount; i++) {
-      fragment.appendChild(renderComment(bigPictureItem.comments[i]));
-    }
-    commentsList.appendChild(fragment);
+
+    commentsArr = bigPictureItem.comments.slice();
+    addComment();
   };
 
-  var btnMoreCommentsClickHandler = function (evt) {
-    var pictureData;
-    var target = evt.target.closest('.big-picture__preview');
-    var pictureUrl = target.querySelector('.big-picture__img img').getAttribute('src');
-    window.data.pics.forEach(function (item, i, arrData) {
-      if (item.url === pictureUrl) {
-        pictureData = arrData[i];
-
-      }
-    });
-    addComment(pictureData);
+  var btnMoreCommentsClickHandler = function () {
+    addComment();
   };
 
 

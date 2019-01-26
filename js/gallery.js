@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var picturesContainer = document.querySelector('.pictures');
+  var pageBody = document.querySelector('body');
 
   var openBigPicture = function (evt) {
     var pictureData;
@@ -15,8 +16,8 @@
         pictureData = arrData[i];
       }
     });
+    pageBody.classList.add('modal-open');
     window.preview.showBigPicture(pictureData);
-    window.preview.btnMoreComments.classList.remove('visually-hidden');
     window.preview.btnMoreComments.addEventListener('click', window.preview.btnMoreCommentsClickHandler);
     window.preview.bigPicture.addEventListener('click', closeBigPicture);
     document.addEventListener('keydown', closeBigPictureKeydown);
@@ -25,6 +26,7 @@
   var closeBigPicture = function (evt) {
     if (evt.target.classList.contains('big-picture') || evt.target.classList.contains('big-picture__cancel')) {
       window.preview.bigPicture.classList.add('hidden');
+      pageBody.classList.remove('modal-open');
       window.preview.bigPicture.removeEventListener('click', closeBigPicture);
       window.preview.btnMoreComments.removeEventListener('click', window.preview.btnMoreCommentsClickHandler);
     }
@@ -33,6 +35,7 @@
   var closeBigPictureKeydown = function (evt) {
     if (evt.keyCode === window.utils.ESC) {
       window.preview.bigPicture.classList.add('hidden');
+      pageBody.classList.remove('modal-open');
       document.removeEventListener('keydown', closeBigPictureKeydown);
     }
   };

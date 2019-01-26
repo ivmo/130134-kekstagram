@@ -5,12 +5,12 @@
 
   var arrayShuffle = function (array) {
     var shuffledArr = array.slice();
-    for (var i = 0; i < shuffledArr.length; i++) {
-      var randomValue = Math.floor(Math.random() * shuffledArr.length);
-      var currentVal = shuffledArr[i];
-      shuffledArr[i] = shuffledArr[randomValue];
-      shuffledArr[randomValue] = currentVal;
-    }
+    shuffledArr.forEach(function (item, i, arr) {
+      var randomValue = Math.floor(Math.random() * arr.length);
+      var currentVal = arr[i];
+      arr[i] = arr[randomValue];
+      arr[randomValue] = currentVal;
+    });
     return shuffledArr;
   };
 
@@ -45,7 +45,9 @@
       filterBtnActive.classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
       filterName = evt.target.id.slice(7);
-      var updatePicsRes = updatePics(window.data.pics, filterName);
+      var updatePicsRes = function () {
+        return updatePics(window.data.pics, filterName);
+      };
       window.debounce(updatePicsRes);
     }
   };
