@@ -5,6 +5,7 @@
 
   var onLoad = function (pictures) {
     window.filter.updatePics(pictures, window.filter.filterName);
+    window.filter.filterInner.classList.remove('img-filters--inactive');
     window.data.pics = pictures;
   };
 

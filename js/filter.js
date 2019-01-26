@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var NEW_PICS_COUNT = 10;
   var filterInner = document.querySelector('.img-filters');
   var filterBtnActive = filterInner.querySelector('.img-filters__button--active');
 
@@ -24,7 +25,7 @@
         window.picture.putPictures(data);
         break;
       case 'new':
-        var newPics = arrayShuffle(data).slice(0, 10);
+        var newPics = arrayShuffle(data).slice(0, NEW_PICS_COUNT);
         window.picture.putPictures(newPics);
         break;
       case 'discussed':
@@ -37,14 +38,14 @@
 
   };
 
-  var filterName = filterBtnActive.id.slice(7);
+  var filterName = filterBtnActive.id.slice(7); // получаем из id типа effect-sepia, имя фильтра, путем обрезания приставки "effect-", одинаковой у всех id.
 
   var filterClickHandler = function (evt) {
     if (evt.target.classList.contains('img-filters__button')) {
       filterBtnActive = filterInner.querySelector('.img-filters__button--active');
       filterBtnActive.classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
-      filterName = evt.target.id.slice(7);
+      filterName = evt.target.id.slice(7); // получаем из id типа effect-sepia, имя фильтра, путем обрезания приставки "effect-", одинаковой у всех id.
       var updatePicsRes = function () {
         return updatePics(window.data.pics, filterName);
       };

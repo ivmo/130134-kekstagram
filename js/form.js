@@ -1,5 +1,12 @@
 'use strict';
 (function () {
+  var MIN_ZOOM = 25;
+  var MAX_ZOOM = 100;
+  var ZOOM_STEP = 25;
+  var FILTER_INDEX = 3;
+  var HASHTAG_MAX_LENGTH = 20;
+  var HASHTAG_MIN_LENGTH = 2;
+  var MAX_HASHTAGS_COUNT = 5;
   var uploadInput = document.querySelector('#upload-file');
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFormInner = document.querySelector('.img-upload__overlay');
@@ -71,21 +78,17 @@
 
 
   var decreaseZoomClickHandler = function () {
-    var currZoom = parseInt(zoomValue.value, 10) - 25;
-    if (currZoom < 25) {
-      currZoom = 25;
-    }
+    var currZoom = parseInt(zoomValue.value, 10) - ZOOM_STEP;
+    currZoom = currZoom < MIN_ZOOM ? MIN_ZOOM : currZoom;
     zoomValue.value = currZoom + '%';
-    imgPreview.style.transform = 'scale(' + currZoom / 100 + ')';
+    imgPreview.style.transform = 'scale(' + currZoom / 100 + ')'; // деление переменной на 100 - перевод процентного значения в десятичную дробь
   };
 
   var increaseZoomClickHandler = function () {
-    var currZoom = parseInt(zoomValue.value, 10) + 25;
-    if (currZoom > 100) {
-      currZoom = 100;
-    }
+    var currZoom = parseInt(zoomValue.value, 10) + ZOOM_STEP;
+    currZoom = currZoom > MAX_ZOOM ? MAX_ZOOM : currZoom;
     zoomValue.value = currZoom + '%';
-    imgPreview.style.transform = 'scale(' + currZoom / 100 + ')';
+    imgPreview.style.transform = 'scale(' + currZoom / 100 + ')'; // деление переменной на 100 - перевод процентного значения в десятичную дробь
   };
 
   zoomOut.addEventListener('click', decreaseZoomClickHandler);
@@ -125,26 +128,26 @@
 
 
     var filterSaturationMouseupHandler = function () {
-      effectInput.value = parseInt(parseInt(effectPin.style.left, 10) / (lineWidth / 100), 10);
+      effectInput.value = parseInt(parseInt(effectPin.style.left, 10) / (lineWidth / 100), 10); // деление переменной на 100 - перевод процентного значения в десятичную дробь
       effectDepthLine.style.width = effectPin.style.left;
       switch (filtersList.querySelector('.effects__radio:checked').id) {
         case 'effect-chrome':
-          effectInput.value = effectInput.value / 100;
+          effectInput.value = effectInput.value / 100; // деление переменной на 100 - перевод процентного значения в десятичную дробь
           imgPreview.querySelector('img').style.filter = 'grayscale(' + effectInput.value + ')';
           break;
         case 'effect-sepia':
-          effectInput.value = effectInput.value / 100;
+          effectInput.value = effectInput.value / 100; // деление переменной на 100 - перевод процентного значения в десятичную дробь
           imgPreview.querySelector('img').style.filter = 'sepia(' + effectInput.value + ')';
           break;
         case 'effect-marvin':
           imgPreview.querySelector('img').style.filter = 'invert(' + effectInput.value + '%)';
           break;
         case 'effect-phobos':
-          effectInput.value = effectInput.value / 100 * 3;
+          effectInput.value = effectInput.value / 100 * FILTER_INDEX; // деление переменной на 100 - перевод процентного значения в десятичную дробь
           imgPreview.querySelector('img').style.filter = 'blur(' + effectInput.value + 'px)';
           break;
         case 'effect-heat':
-          effectInput.value = effectInput.value / 100 * 3;
+          effectInput.value = effectInput.value / 100 * FILTER_INDEX; // деление переменной на 100 - перевод процентного значения в десятичную дробь
           imgPreview.querySelector('img').style.filter = 'brightness(' + effectInput.value + ')';
           break;
         default:
@@ -218,10 +221,10 @@
       var hashtags = hashtagsInput.value;
       var hashtagsArr = hashtags.split(' ');
       var checkMaxLength = function (item) {
-        return item.length > 20;
+        return item.length > HASHTAG_MAX_LENGTH;
       };
       var checkMinLength = function (item) {
-        return item.length < 2;
+        return item.length < HASHTAG_MIN_LENGTH;
       };
       var checkHashtagSharp = function (item) {
         return item.slice(0, 1) !== '#';
@@ -254,7 +257,7 @@
         return repeatItems;
       };
       var validateMessage = '';
-      if (hashtagsArr.length > 5) {
+      if (hashtagsArr.length > MAX_HASHTAGS_COUNT) {
         validateMessage = 'Нельзя указать больше пяти хэш-тегов';
       } else if (hashtagsArr.some(checkHashtagSharp)) {
         validateMessage = 'хэш-тег должен начинаться с символа #';
