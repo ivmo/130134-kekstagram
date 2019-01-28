@@ -5,10 +5,11 @@
   var fileChooser = window.form.upload.querySelector('.img-upload__input');
   var preview = window.form.upload.querySelector('.img-upload__preview img');
   var previewMiniatures = window.form.upload.querySelectorAll('.effects__preview');
+  var dropArea = window.form.upload;
+  var file;
 
-  fileChooser.addEventListener('change', function () {
-    var file = fileChooser.files[0];
-    var fileName = file.name.toLowerCase();
+  var imgUpload = function (data) {
+    var fileName = data.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
@@ -25,7 +26,38 @@
 
       });
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(data);
     }
+    window.form.open();
+  };
+
+  dropArea.addEventListener('dragenter', function (evt) {
+    evt.preventDefault();
+    dropArea.classList.add('highlight');
   });
+  dropArea.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+    dropArea.classList.add('highlight');
+  });
+  dropArea.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
+    dropArea.classList.remove('highlight');
+  });
+  dropArea.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    dropArea.classList.remove('highlight');
+
+    var dt = evt.dataTransfer;
+    file = dt.files[0];
+
+    imgUpload(file);
+
+  });
+
+  fileChooser.addEventListener('change', function () {
+    file = fileChooser.files[0];
+    imgUpload(file);
+
+  });
+
 })();

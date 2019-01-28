@@ -7,7 +7,6 @@
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAG_MIN_LENGTH = 2;
   var MAX_HASHTAGS_COUNT = 5;
-  var uploadInput = document.querySelector('#upload-file');
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFormInner = document.querySelector('.img-upload__overlay');
   var uploadFormCloseBtn = uploadFormInner.querySelector('.img-upload__cancel');
@@ -73,8 +72,6 @@
       uploadForm.reset();
     }
   };
-
-  uploadInput.addEventListener('change', openPhotoForm);
 
 
   var decreaseZoomClickHandler = function () {
@@ -290,6 +287,7 @@
 
 
   window.form = {
+    open: openPhotoForm,
     showMessage: showMessage,
     upload: uploadForm,
     hide: closePhotoForm,
