@@ -48,6 +48,7 @@
     dropArea.classList.remove('highlight');
 
     var dt = evt.dataTransfer;
+    fileChooser.files = dt.files;
     file = dt.files[0];
 
     imgUpload(file);
